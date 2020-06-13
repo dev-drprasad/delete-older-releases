@@ -1,0 +1,22 @@
+name: Delete Multiple Releases
+description: delete multiple releases of any repo
+author: "dev-drprasad"
+
+branding:
+  color: "red"
+  icon: "delete"
+
+inputs:
+  keep_latest:
+    description: how may latest releases to keep
+    required: true
+  repo:
+    description: repo name in the form of <owner>/<repoName>
+    required: false
+  keep_tags:
+    description: whether to delete or keep tags
+    required: false
+
+runs:
+  using: "node12"
+  main: "index.js"

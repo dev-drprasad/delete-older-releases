@@ -1,0 +1,14 @@
+{
+  "name": "delete-multiple-releases",
+  "version": "v0.1.0",
+  "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dev-drprasad/delete-multiple-releases"
+  },
+  "keywords": [],
+  "author": "REDDY PRASAD",
+  "license": "ISC",
+  "homepage": "https://github.com/dev-drprasad/delete-multiple-releases",
+  "dependencies": {}
+}

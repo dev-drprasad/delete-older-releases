@@ -16,7 +16,7 @@ if (!process.env.GITHUB_REPOSITORY) {
 }
 
 if (!process.env.INPUT_REPO) {
-  console.warn("💬 no `repo` name given. fall-ing back to this repo");
+  console.warn("💬  no `repo` name given. fall-ing back to this repo");
 }
 
 const [owner, repo] = (
@@ -24,23 +24,21 @@ const [owner, repo] = (
 ).split("/");
 
 if (!owner || !repo) {
-  console.error("☠️ either owner or repo name is empty. exiting...");
+  console.error("☠️  either owner or repo name is empty. exiting...");
   process.exitCode = 1;
   return;
 }
 
-let keepLatest = 0;
+const keepLatest = Number(process.env.INPUT_KEEP_LATEST);
 
-if (Number.isNaN(Number(process.env.INPUT_KEEP_LATEST))) {
-  console.error("💣 invalid `keep_latest` given. exiting...");
+if (Number.isNaN(keepLatest) || keepLatest < 0) {
+  console.error("💣  invalid `keep_latest` given. exiting...");
   process.exitCode = 1;
   return;
-} else {
-  keepLatest = Number(process.env.INPUT_KEEP_LATEST);
 }
 
 if (keepLatest === 0) {
-  console.error("🌶  no `keep_latest` given, will delete all releases");
+  console.error("🌶  given `keep_latest` is 0, this will wipe out releases");
 }
 
 const shouldDeleteTags = !process.env.INPUT_KEEP_TAGS;

@@ -1,5 +1,7 @@
 # GitHub Action: Delete multiple releases
 
+👉🏼 🚧🚧 **STILL IN PROGRESS** 🚧🚧 👈🏼
+
 This action deletes multiple releases of given repo
 
 Add following step to your workflow:

@@ -1,18 +1,18 @@
-# GitHub Action: Delete multiple releases
+# GitHub Action: Delete older releases
 
 👉🏼 🚧🚧 **STILL IN PROGRESS** 🚧🚧 👈🏼
 
-This action deletes multiple releases of given repo
+This action deletes older releases of given repo
 
 Add following step to your workflow:
 
 ```yaml
-- uses: dev-drprasad/delete-multiple-releases@v0.1.0
+- uses: dev-drprasad/delete-older-releases@v0.1.0
   with:
-    repo: dev-drprasad/delete-multiple-releases # defaults to current repo
+    repo: dev-drprasad/delete-older-releases # defaults to current repo
     keep_latest: 3
   env:
-    GITHUB_TOKEN: ${{ secrets.REPO_GITHUB_TOKEN }}
+    GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
 ### Available Options
@@ -23,7 +23,7 @@ Add following step to your workflow:
 | -------- |
 | true     |
 
-If specified, latest specified number of releases (sorted by time) will be kept. Pass `0` if you want to delete all releases
+Represents number of latest releases (sorted by `created_at`) to keep. Pass `0` if you want to delete all releases
 
 #### `repo`
 
@@ -31,12 +31,4 @@ If specified, latest specified number of releases (sorted by time) will be kept.
 | -------- | --------------------- |
 | false    | repo executing action |
 
-Repo name in the format of `<owner>/<repoName>`. If passed repo, make sure to pass `GITHUB_TOKEN` with permissions to delete releases as env variable
-
-#### `keep_tags`
-
-| required | default |
-| -------- | ------- |
-| false    | false   |
-
-If passed `true`, tags won't be deleted
+Repo name in the format of `<owner>/<repoName>`. Defaults to the repo that executing this action

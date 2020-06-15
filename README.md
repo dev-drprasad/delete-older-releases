@@ -1,7 +1,5 @@
 # GitHub Action: Delete older releases
 
-👉🏼 🚧🚧 **STILL IN PROGRESS** 🚧🚧 👈🏼
-
 This action deletes older releases of given repo
 
 Add following step to your workflow:

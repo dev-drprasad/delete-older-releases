@@ -68,6 +68,10 @@ async function deleteOlderReleases(keepLatest) {
     });
     data = data || [];
     const activeReleases = data.filter(({ draft }) => !draft);
+    if (activeReleases.length === 0) {
+      console.log(`😕  no active releases found. exiting...`);
+      return;
+    }
     console.log(`💬  found total of ${activeReleases.length} active releases`);
     releaseIds = activeReleases.map(({ id }) => id).slice(keepLatest);
   } catch (error) {

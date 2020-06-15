@@ -7,7 +7,7 @@ Add following step to your workflow:
 ```yaml
 - uses: dev-drprasad/delete-older-releases@v0.1.0
   with:
-    repo: dev-drprasad/delete-older-releases # defaults to current repo
+    repo: <owner>/<repoName> # defaults to current repo
     keep_latest: 3
   env:
     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

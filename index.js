@@ -78,7 +78,9 @@ async function deleteOlderReleases(keepLatest) {
       console.log(`😕  no active releases found. exiting...`);
       return;
     }
-    console.log(`💬  found total of ${activeReleases.length} active releases`);
+    console.log(
+      `💬  found total of ${activeReleases.length} active release(s)`
+    );
     releaseIdsAndTags = activeReleases
       .map(({ id, tag_name: tagName }) => ({ id, tagName }))
       .slice(keepLatest);

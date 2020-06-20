@@ -47,6 +47,12 @@ if (keepLatest === 0) {
   console.error("🌶  given `keep_latest` is 0, this will wipe out all releases");
 }
 
+const shouldDeleteTags = process.env.INPUT_DELETE_TAGS === "true";
+
+if (shouldDeleteTags) {
+  console.log("🔖  corresponding tags also will be deleted");
+}
+
 const commonOpts = {
   host: "api.github.com",
   port: 443,
@@ -59,7 +65,7 @@ const commonOpts = {
 };
 
 async function deleteOlderReleases(keepLatest) {
-  let releaseIds = [];
+  let releaseIdsAndTags = [];
   try {
     let data = await fetch({
       ...commonOpts,
@@ -72,8 +78,12 @@ async function deleteOlderReleases(keepLatest) {
       console.log(`😕  no active releases found. exiting...`);
       return;
     }
-    console.log(`💬  found total of ${activeReleases.length} active releases`);
-    releaseIds = activeReleases.map(({ id }) => id).slice(keepLatest);
+    console.log(
+      `💬  found total of ${activeReleases.length} active release(s)`
+    );
+    releaseIdsAndTags = activeReleases
+      .map(({ id, tag_name: tagName }) => ({ id, tagName }))
+      .slice(keepLatest);
   } catch (error) {
     console.error(`🌶  failed to get list of releases <- ${error.message}`);
     console.error(`exiting...`);
@@ -81,15 +91,15 @@ async function deleteOlderReleases(keepLatest) {
     return;
   }
 
-  if (releaseIds.length === 0) {
+  if (releaseIdsAndTags.length === 0) {
     console.error(`😕  no older releases found. exiting...`);
     return;
   }
-  console.log(`🍻  found ${releaseIds.length} older release(s)`);
+  console.log(`🍻  found ${releaseIdsAndTags.length} older release(s)`);
 
   let hasError = false;
-  for (let i = 0; i < releaseIds.length; i++) {
-    const releaseId = releaseIds[i];
+  for (let i = 0; i < releaseIdsAndTags.length; i++) {
+    const { id: releaseId, tagName } = releaseIdsAndTags[i];
 
     try {
       const _ = await fetch({
@@ -97,6 +107,22 @@ async function deleteOlderReleases(keepLatest) {
         path: `/repos/${owner}/${repo}/releases/${releaseId}`,
         method: "DELETE",
       });
+
+      if (shouldDeleteTags) {
+        try {
+          const _ = await fetch({
+            ...commonOpts,
+            path: `/repos/${owner}/${repo}/git/refs/tags/${tagName}`,
+            method: "DELETE",
+          });
+        } catch (error) {
+          console.error(
+            `🌶  failed to delete tag "${tagName}"  <- ${error.message}`
+          );
+          hasError = true;
+          break;
+        }
+      }
     } catch (error) {
       console.error(
         `🌶  failed to delete release with id "${releaseId}"  <- ${error.message}`
@@ -112,7 +138,7 @@ async function deleteOlderReleases(keepLatest) {
   }
 
   console.log(
-    `👍🏼  ${releaseIds.length} older release(s) deleted successfully!`
+    `👍🏼  ${releaseIdsAndTags.length} older release(s) deleted successfully!`
   );
 }
 

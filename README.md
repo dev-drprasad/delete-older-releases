@@ -21,7 +21,7 @@ Add following step to your workflow:
 | -------- |
 | true     |
 
-Represents number of latest releases (sorted by `created_at`) to keep. Pass `0` if you want to delete all releases
+Specifies number of latest releases (sorted by `created_at`) to keep. Pass `0` if you want to delete all releases
 
 #### `delete_tags`
 
@@ -29,7 +29,7 @@ Represents number of latest releases (sorted by `created_at`) to keep. Pass `0` 
 | -------- | ------- |
 | false    | false   |
 
-Represents whether to delete tags associated to older releases or not. Older tags without any associated releases will not be deleted
+Specifies whether to delete tags associated to older releases or not. Older tags without any associated releases will not be deleted
 
 #### `repo`
 

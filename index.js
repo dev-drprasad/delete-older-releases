@@ -1,7 +1,7 @@
-const fetch = require("./fetch");
+const fetch = require('./fetch');
 
 if (!process.env.GITHUB_TOKEN) {
-  console.error("🔴 no GITHUB_TOKEN found. pass `GITHUB_TOKEN` as env");
+  console.error('🔴 no GITHUB_TOKEN found. pass `GITHUB_TOKEN` as env');
   process.exitCode = 1;
   return;
 }
@@ -9,28 +9,26 @@ const GITHUB_TOKEN = process.env.GITHUB_TOKEN;
 
 if (!process.env.GITHUB_REPOSITORY) {
   console.error(
-    "🔴 no GITHUB_REPOSITORY found. pass `GITHUB_REPOSITORY` as env"
-  );
+      '🔴 no GITHUB_REPOSITORY found. pass `GITHUB_REPOSITORY` as env');
   process.exitCode = 1;
   return;
 }
 
 if (!process.env.INPUT_REPO) {
-  console.warn("💬  no `repo` name given. fall-ing back to this repo");
+  console.warn('💬  no `repo` name given. fall-ing back to this repo');
 }
 
-const [owner, repo] = (
-  process.env.INPUT_REPO || process.env.GITHUB_REPOSITORY
-).split("/");
+const [owner, repo] =
+    (process.env.INPUT_REPO || process.env.GITHUB_REPOSITORY).split('/');
 
 if (!owner || !repo) {
-  console.error("☠️  either owner or repo name is empty. exiting...");
+  console.error('☠️  either owner or repo name is empty. exiting...');
   process.exitCode = 1;
   return;
 }
 
 if (!process.env.INPUT_KEEP_LATEST) {
-  console.error("✋🏼  no `keep_latest` given. exiting...");
+  console.error('✋🏼  no `keep_latest` given. exiting...');
   process.exitCode = 1;
   return;
 }
@@ -38,29 +36,30 @@ if (!process.env.INPUT_KEEP_LATEST) {
 const keepLatest = Number(process.env.INPUT_KEEP_LATEST);
 
 if (Number.isNaN(keepLatest) || keepLatest < 0) {
-  console.error("🤮  invalid `keep_latest` given. exiting...");
+  console.error('🤮  invalid `keep_latest` given. exiting...');
   process.exitCode = 1;
   return;
 }
 
 if (keepLatest === 0) {
-  console.error("🌶  given `keep_latest` is 0, this will wipe out all releases");
+  console.error(
+      '🌶  given `keep_latest` is 0, this will wipe out all releases');
 }
 
-const shouldDeleteTags = process.env.INPUT_DELETE_TAGS === "true";
+const shouldDeleteTags = process.env.INPUT_DELETE_TAGS === 'true';
 
 if (shouldDeleteTags) {
-  console.log("🔖  corresponding tags also will be deleted");
+  console.log('🔖  corresponding tags also will be deleted');
 }
 
 const commonOpts = {
-  host: "api.github.com",
+  host: 'api.github.com',
   port: 443,
-  protocol: "https:",
+  protocol: 'https:',
   auth: `user:${GITHUB_TOKEN}`,
   headers: {
-    "Content-Type": "application/json",
-    "User-Agent": "node.js",
+    'Content-Type': 'application/json',
+    'User-Agent': 'node.js',
   },
 };
 
@@ -70,20 +69,18 @@ async function deleteOlderReleases(keepLatest) {
     let data = await fetch({
       ...commonOpts,
       path: `/repos/${owner}/${repo}/releases`,
-      method: "GET",
+      method: 'GET',
     });
     data = data || [];
-    const activeReleases = data.filter(({ draft }) => !draft);
+    const activeReleases = data.filter(({draft}) => !draft);
     if (activeReleases.length === 0) {
       console.log(`😕  no active releases found. exiting...`);
       return;
     }
-    console.log(
-      `💬  found total of ${activeReleases.length} active release(s)`
-    );
-    releaseIdsAndTags = activeReleases
-      .map(({ id, tag_name: tagName }) => ({ id, tagName }))
-      .slice(keepLatest);
+    console.log(`💬  found total of ${activeReleases.length} active release(s)`);
+    releaseIdsAndTags =
+        activeReleases.map(({id, tag_name: tagName}) => ({id, tagName}))
+            .slice(keepLatest);
   } catch (error) {
     console.error(`🌶  failed to get list of releases <- ${error.message}`);
     console.error(`exiting...`);
@@ -99,13 +96,13 @@ async function deleteOlderReleases(keepLatest) {
 
   let hasError = false;
   for (let i = 0; i < releaseIdsAndTags.length; i++) {
-    const { id: releaseId, tagName } = releaseIdsAndTags[i];
+    const {id: releaseId, tagName} = releaseIdsAndTags[i];
 
     try {
       const _ = await fetch({
         ...commonOpts,
         path: `/repos/${owner}/${repo}/releases/${releaseId}`,
-        method: "DELETE",
+        method: 'DELETE',
       });
 
       if (shouldDeleteTags) {
@@ -113,20 +110,18 @@ async function deleteOlderReleases(keepLatest) {
           const _ = await fetch({
             ...commonOpts,
             path: `/repos/${owner}/${repo}/git/refs/tags/${tagName}`,
-            method: "DELETE",
+            method: 'DELETE',
           });
         } catch (error) {
           console.error(
-            `🌶  failed to delete tag "${tagName}"  <- ${error.message}`
-          );
+              `🌶  failed to delete tag "${tagName}"  <- ${error.message}`);
           hasError = true;
           break;
         }
       }
     } catch (error) {
-      console.error(
-        `🌶  failed to delete release with id "${releaseId}"  <- ${error.message}`
-      );
+      console.error(`🌶  failed to delete release with id "${
+          releaseId}"  <- ${error.message}`);
       hasError = true;
       break;
     }
@@ -137,9 +132,8 @@ async function deleteOlderReleases(keepLatest) {
     return;
   }
 
-  console.log(
-    `👍🏼  ${releaseIdsAndTags.length} older release(s) deleted successfully!`
-  );
+  console.log(`👍🏼  ${
+      releaseIdsAndTags.length} older release(s) deleted successfully!`);
 }
 
 async function run() {

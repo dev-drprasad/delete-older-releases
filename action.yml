@@ -13,6 +13,9 @@ inputs:
   repo:
     description: repo name in the form of <owner>/<repoName>
     required: false
+  delete_tags:
+    description: whether to delete tags associated to older releases or not
+    required: false
 
 runs:
   using: "node12"

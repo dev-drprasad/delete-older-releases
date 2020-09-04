@@ -13,7 +13,23 @@ Add following step to your workflow:
     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-### Available Options
+### Environment Options
+
+#### `INPUT_DELETE_TAGS`
+
+| required | default | 
+| -------- | -------
+| false    | false   |
+
+Specifies whether to delete tags associated to older releases or not. Older tags without any associated releases will not be deleted
+
+Example: 
+```
+env:
+   INPUT_DELETE_TAGS: true
+```
+
+### Command Options
 
 #### `keep_latest`
 
@@ -22,14 +38,6 @@ Add following step to your workflow:
 | true     |
 
 Specifies number of latest releases (sorted by `created_at`) to keep. Pass `0` if you want to delete all releases
-
-#### `delete_tags`
-
-| required | default |
-| -------- | ------- |
-| false    | false   |
-
-Specifies whether to delete tags associated to older releases or not. Older tags without any associated releases will not be deleted
 
 #### `repo`
 

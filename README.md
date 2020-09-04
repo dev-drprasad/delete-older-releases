@@ -13,7 +13,7 @@ Add following step to your workflow:
     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 ```
 
-### Environment Options
+### Environment Variables
 
 #### `INPUT_DELETE_TAGS`
 

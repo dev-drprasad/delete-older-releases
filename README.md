@@ -38,3 +38,11 @@ Specifies whether to delete tags associated to older releases or not. Older tags
 | false    | repo executing action |
 
 Repo name in the format of `<owner>/<repoName>`. Defaults to the repo that executing this action
+
+#### `delete_tag_pattern`
+
+| required | default      |
+| -------- | ------------ |
+| false    | empty string |
+
+Specifies a pettern to match. If not specified every release will be targeted. If specified every release containing the pettern will be targetet. Use this opten for example to remove olde beta releases.

@@ -115,7 +115,7 @@ async function deleteOlderReleases(keepLatest) {
     const { id: releaseId, tagName } = releaseIdsAndTags[i];
 
     try {
-      console.log(`starting to delete ${tagName} with id ${id}`);
+      console.log(`starting to delete ${tagName} with id ${releaseId}`);
 
       const _ = await fetch({
         ...commonOpts,

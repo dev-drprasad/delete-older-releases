@@ -17,7 +17,7 @@ inputs:
     description: whether to delete tags associated to older releases or not
     required: false
   delete_tag_pattern:
-    description: part of the tag name. Exapmle if you want to delete 0.0.1-beta and 0.0.2-beta but not 0.0.1 - set this to "beta". If not set it will target all releases.
+    description: part of the tag name. Example, if you want to delete 0.0.1-beta and 0.0.2-beta but not 0.0.1 then set this to just "beta". If not set then it will target all releases.
     required: false
 
 runs:

@@ -45,4 +45,4 @@ Repo name in the format of `<owner>/<repoName>`. Defaults to the repo that execu
 | -------- | ------------ |
 | false    | empty string |
 
-Specifies a pettern to match. If not specified every release will be targeted. If specified every release containing the pettern will be targetet. Use this opten for example to remove olde beta releases.
+Specifies a pattern to match. If not specified then every release will be targeted. If specified then every release containing the pattern will be targeted. Use this option for example to remove old beta releases.

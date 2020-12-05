@@ -53,14 +53,10 @@ if (shouldDeleteTags) {
   console.log("🔖  corresponding tags also will be deleted");
 }
 
-let deletePattern = process.env.INPUT_DELETE_TAG_PATTERN;
-if (deletePattern === undefined) {
-  console.log("all releases will be targeted");
-  deletePattern = "";
-} else {
+let deletePattern = process.env.INPUT_DELETE_TAG_PATTERN || "";
+if (deletePattern) {
   console.log(`releases containing ${deletePattern} will be targeted`);
 }
-
 const commonOpts = {
   host: "api.github.com",
   port: 443,
@@ -82,9 +78,7 @@ async function deleteOlderReleases(keepLatest) {
     });
     data = data || [];
     // filter for delete_pattern
-    data = data.filter(
-      (release) => release.tag_name.indexOf(deletePattern) !== -1
-    );
+    const activeMatchedReleases = data.filter(({draft}) => !draft && tag_name.indexOf(deletePattern) !== -1)
 
     const activeReleases = data.filter(({ draft }) => !draft);
     if (activeReleases.length === 0) {

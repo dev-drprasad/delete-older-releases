@@ -53,6 +53,10 @@ if (shouldDeleteTags) {
   console.log("🔖  corresponding tags also will be deleted");
 }
 
+let deletePattern = process.env.INPUT_DELETE_TAG_PATTERN || "";
+if (deletePattern) {
+  console.log(`releases containing ${deletePattern} will be targeted`);
+}
 const commonOpts = {
   host: "api.github.com",
   port: 443,
@@ -69,19 +73,26 @@ async function deleteOlderReleases(keepLatest) {
   try {
     let data = await fetch({
       ...commonOpts,
-      path: `/repos/${owner}/${repo}/releases`,
+      path: `/repos/${owner}/${repo}/releases?per_page=100`,
       method: "GET",
     });
     data = data || [];
-    const activeReleases = data.filter(({ draft }) => !draft);
-    if (activeReleases.length === 0) {
+    // filter for delete_pattern
+    const activeMatchedReleases = data.filter(
+      ({ draft, tag_name }) => !draft && tag_name.indexOf(deletePattern) !== -1
+    );
+
+    if (activeMatchedReleases.length === 0) {
       console.log(`😕  no active releases found. exiting...`);
       return;
     }
+
+    const matchingLoggingAddition = deletePattern.length > 0 ? " matching" : "";
+
     console.log(
-      `💬  found total of ${activeReleases.length} active release(s)`
+      `💬  found total of ${activeMatchedReleases.length}${matchingLoggingAddition} active release(s)`
     );
-    releaseIdsAndTags = activeReleases
+    releaseIdsAndTags = activeMatchedReleases
       .map(({ id, tag_name: tagName }) => ({ id, tagName }))
       .slice(keepLatest);
   } catch (error) {
@@ -102,6 +113,8 @@ async function deleteOlderReleases(keepLatest) {
     const { id: releaseId, tagName } = releaseIdsAndTags[i];
 
     try {
+      console.log(`starting to delete ${tagName} with id ${releaseId}`);
+
       const _ = await fetch({
         ...commonOpts,
         path: `/repos/${owner}/${repo}/releases/${releaseId}`,

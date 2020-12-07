@@ -78,17 +78,21 @@ async function deleteOlderReleases(keepLatest) {
     });
     data = data || [];
     // filter for delete_pattern
-    const activeMatchedReleases = data.filter(({draft}) => !draft && tag_name.indexOf(deletePattern) !== -1)
+    const activeMatchedReleases = data.filter(
+      ({ draft, tag_name }) => !draft && tag_name.indexOf(deletePattern) !== -1
+    );
 
-    const activeReleases = data.filter(({ draft }) => !draft);
-    if (activeReleases.length === 0) {
+    if (activeMatchedReleases.length === 0) {
       console.log(`😕  no active releases found. exiting...`);
       return;
     }
+
+    const matchingLoggingAddition = deletePattern.length > 0 ? " matching" : "";
+
     console.log(
-      `💬  found total of ${activeReleases.length} active release(s)`
+      `💬  found total of ${activeMatchedReleases.length}${matchingLoggingAddition} active release(s)`
     );
-    releaseIdsAndTags = activeReleases
+    releaseIdsAndTags = activeMatchedReleases
       .map(({ id, tag_name: tagName }) => ({ id, tagName }))
       .slice(keepLatest);
   } catch (error) {

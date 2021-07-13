@@ -53,8 +53,8 @@ if (shouldDeleteTags) {
   console.log("🔖  corresponding tags also will be deleted");
 }
 
-let deletePattern = process.env.INPUT_DELETE_TAG_PATTERN || "";
-if (deletePattern) {
+let deletePattern = new RegExp(process.env.INPUT_DELETE_TAG_PATTERN || "");
+if (process.env.INPUT_DELETE_TAG_PATTERN) {
   console.log(`releases matching ${deletePattern} will be targeted`);
 }
 

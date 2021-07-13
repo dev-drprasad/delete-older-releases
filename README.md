@@ -47,3 +47,11 @@ Repo name in the format of `<owner>/<repoName>`. Defaults to the repo that execu
 | false    | empty string |
 
 Specifies a pattern to match. If not specified then every release will be targeted. If specified then every release containing the pattern will be targeted. Use this option for example to remove old beta releases.
+
+#### `prerelease_only`
+
+| required | default |
+| -------- | ------- |
+| false    | false   |
+
+If this is true then only delete prereleases.

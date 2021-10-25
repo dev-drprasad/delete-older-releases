@@ -73,7 +73,7 @@ async function deleteOlderReleases(keepLatest) {
   try {
     let data = await fetch({
       ...commonOpts,
-      path: `/repos/${owner}/${repo}/releases?per_page=100`,
+      path: `/repos/${owner}/${repo}/releases?per_page=1000`,
       method: "GET",
     });
     data = data || [];
@@ -83,7 +83,7 @@ async function deleteOlderReleases(keepLatest) {
     );
 
     if (activeMatchedReleases.length === 0) {
-      console.log(`😕  no active releases found. exiting...`);
+      console.log(`🧐  no active releases found. exiting...`);
       return;
     }
 

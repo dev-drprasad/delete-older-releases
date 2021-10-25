@@ -103,7 +103,7 @@ async function deleteOlderReleases(keepLatest) {
   }
 
   if (releaseIdsAndTags.length === 0) {
-    console.error(`😕  no older releases found. exiting...`);
+    console.error(`🧐  no older releases found. exiting...`);
     return;
   }
   console.log(`🍻  found ${releaseIdsAndTags.length} older release(s)`);
@@ -133,7 +133,6 @@ async function deleteOlderReleases(keepLatest) {
             `🌶  failed to delete tag "${tagName}"  <- ${error.message}`
           );
           hasError = true;
-          break;
         }
       }
     } catch (error) {
@@ -141,7 +140,6 @@ async function deleteOlderReleases(keepLatest) {
         `🌶  failed to delete release with id "${releaseId}"  <- ${error.message}`
       );
       hasError = true;
-      break;
     }
   }
 

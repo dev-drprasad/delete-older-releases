@@ -48,14 +48,21 @@ if (keepLatest === 0) {
 }
 
 const shouldDeleteTags = process.env.INPUT_DELETE_TAGS === "true";
+const shouldUseRegex = process.env.INPUT_REGEX === "true";
 
 if (shouldDeleteTags) {
   console.log("🔖  corresponding tags also will be deleted");
 }
 
+let deleteRegex;
 let deletePattern = process.env.INPUT_DELETE_TAG_PATTERN || "";
 if (deletePattern) {
   console.log(`releases containing ${deletePattern} will be targeted`);
+
+  if (shouldUseRegex) {
+    console.log(`treating pattern as a regex pattern`);
+    deleteRegex = new RegExp(deletePattern);
+  }
 }
 const commonOpts = {
   host: "api.github.com",
@@ -68,6 +75,14 @@ const commonOpts = {
   },
 };
 
+function checkPatternMatch(tag_name) {
+  if (deleteRegex) {
+    return deleteRegex.test(tag_name);
+  } else {
+    return tag_name.indexOf(deletePattern) !== -1;
+  }
+}
+
 async function deleteOlderReleases(keepLatest) {
   let releaseIdsAndTags = [];
   try {
@@ -77,10 +92,9 @@ async function deleteOlderReleases(keepLatest) {
       method: "GET",
     });
     data = data || [];
-    const deleteRegex = new RegExp(deletePattern);
     // filter for delete_pattern
     const activeMatchedReleases = data.filter(
-      ({ draft, tag_name }) => !draft && deleteRegex.test(tag_name)
+      ({ draft, tag_name }) => !draft && checkPatternMatch(tag_name)
     );
 
     if (activeMatchedReleases.length === 0) {

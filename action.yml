@@ -19,6 +19,10 @@ inputs:
   delete_tag_pattern:
     description: part of the tag name. Example, if you want to delete 0.0.1-beta and 0.0.2-beta but not 0.0.1 then set this to just "beta". If not set then it will target all releases.
     required: false
+  regex:
+    description: whether to use regex matching for the given pattern against the tag name
+    required: false
+    default: false
 
 runs:
   using: "node12"

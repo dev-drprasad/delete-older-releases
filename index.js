@@ -77,9 +77,10 @@ async function deleteOlderReleases(keepLatest) {
       method: "GET",
     });
     data = data || [];
+    const deleteRegex = new RegExp(deletePattern);
     // filter for delete_pattern
     const activeMatchedReleases = data.filter(
-      ({ draft, tag_name }) => !draft && tag_name.indexOf(deletePattern) !== -1
+      ({ draft, tag_name }) => !draft && deleteRegex.test(tag_name)
     );
 
     if (activeMatchedReleases.length === 0) {

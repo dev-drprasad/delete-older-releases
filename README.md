@@ -5,7 +5,7 @@ This action deletes older releases of given repo
 Add following step to your workflow:
 
 ```yaml
-- uses: dev-drprasad/delete-older-releases@v0.2.0
+- uses: dev-drprasad/delete-older-releases@v0.2
   with:
     repo: <owner>/<repoName> # defaults to current repo
     keep_latest: 3

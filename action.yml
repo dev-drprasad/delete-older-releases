@@ -16,9 +16,11 @@ inputs:
   delete_tags:
     description: whether to delete tags associated to older releases or not
     required: false
-  delete_tag_pattern:
-    description: part of the tag name. Example, if you want to delete 0.0.1-beta and 0.0.2-beta but not 0.0.1 then set this to just "beta". If not set then it will target all releases.
+  delete_tag_regex:
+    description: Regular expression for the tags you want to delete
     required: false
+  prerelease_only:
+    description: only delete pre-releases
 
 runs:
   using: "node16"

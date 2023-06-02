@@ -40,10 +40,18 @@ Specifies whether to delete tags associated to older releases or not. Older tags
 
 Repo name in the format of `<owner>/<repoName>`. Defaults to the repo that executing this action
 
-#### `delete_tag_pattern`
+#### `delete_tag_regex`
 
 | required | default      |
 | -------- | ------------ |
 | false    | empty string |
 
 Specifies a pattern to match. If not specified then every release will be targeted. If specified then every release containing the pattern will be targeted. Use this option for example to remove old beta releases.
+
+#### `prerelease_only`
+
+| required | default |
+| -------- | ------- |
+| false    | false   |
+
+If this is true then only delete prereleases.

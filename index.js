@@ -73,7 +73,7 @@ async function deleteOlderReleases(keepLatest) {
   try {
     let data = await fetch({
       ...commonOpts,
-      path: `/repos/${owner}/${repo}/releases?per_page=100`,
+      path: `/repos/${owner}/${repo}/releases?per_page=1000`,
       method: "GET",
     });
     data = data || [];
@@ -83,7 +83,7 @@ async function deleteOlderReleases(keepLatest) {
     );
 
     if (activeMatchedReleases.length === 0) {
-      console.log(`😕  no active releases found. exiting...`);
+      console.log(`🧐  no active releases found. exiting...`);
       return;
     }
 
@@ -106,7 +106,7 @@ async function deleteOlderReleases(keepLatest) {
   }
 
   if (releaseIdsAndTags.length === 0) {
-    console.error(`😕  no older releases found. exiting...`);
+    console.error(`🧐  no older releases found. exiting...`);
     return;
   }
   console.log(`🍻  found ${releaseIdsAndTags.length} older release(s)`);
@@ -136,7 +136,6 @@ async function deleteOlderReleases(keepLatest) {
             `🌶  failed to delete tag "${tagName}"  <- ${error.message}`
           );
           hasError = true;
-          break;
         }
       }
     } catch (error) {
@@ -144,7 +143,6 @@ async function deleteOlderReleases(keepLatest) {
         `🌶  failed to delete release with id "${releaseId}"  <- ${error.message}`
       );
       hasError = true;
-      break;
     }
   }
 

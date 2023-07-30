@@ -5,10 +5,12 @@ This action deletes older releases of given repo
 Add following step to your workflow:
 
 ```yaml
-- uses: dev-drprasad/delete-older-releases@v0.2
+- uses: dev-drprasad/delete-older-releases@master
   with:
     repo: <owner>/<repoName> # defaults to current repo
     keep_latest: 3
+    keep_min_download_counts: 1 # Optional parameters
+    delete_expired_data: 10 # Optional parameters
     delete_tag_pattern: beta # defaults to ""
   env:
     GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
@@ -23,6 +25,22 @@ Add following step to your workflow:
 | true     |
 
 Specifies number of latest releases (sorted by `created_at`) to keep. Pass `0` if you want to delete all releases
+
+#### `keep_min_download_counts`
+
+| required | default |
+| -------- | ------- |
+| false    |    0    |
+
+Specifies that versions with fewer downloads than this value (sorted by "created_at") are to be removed. If you do not need this restriction, please pass "0" or do not set the variable. The rule is less than, not less than or equal to, and values greater than or equal to will be retained.
+
+#### `delete_expired_data`
+
+| required | default |
+| -------- | ------- |
+| false    |    0    |
+
+To delete data that exceeds the specified number of days, please enter the number of overdue days. For example, setting the value to 10 will delete release data created more than 10 days ago. Note that this parameter is based on keep latest.
 
 #### `delete_tags`
 

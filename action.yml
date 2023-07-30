@@ -10,6 +10,14 @@ inputs:
   keep_latest:
     description: how many latest releases to keep
     required: true
+  keep_min_download_counts:
+    description: keep old releases with downloads greater than this parameter <
+    required: false
+    default: 0
+  delete_expired_data:
+    description: Delete data older than a specified number of days
+    required: false
+    default: 0
   repo:
     description: repo name in the form of <owner>/<repoName>
     required: false

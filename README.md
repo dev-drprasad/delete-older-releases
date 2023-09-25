@@ -32,7 +32,7 @@ Specifies number of latest releases (sorted by `created_at`) to keep. Pass `0` i
 | -------- | ------- |
 | false    |    0    |
 
-Specifies that versions with fewer downloads than this value (sorted by "created_at") are to be removed. If you do not need this restriction, please pass "0" or do not set the variable. The rule is less than, not less than or equal to, and values greater than or equal to will be retained.
+Specifies the number of downloads that versions must have at minimum, otherwise they will be removed ....
 
 #### `delete_expired_data`
 

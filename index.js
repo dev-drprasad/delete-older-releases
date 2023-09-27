@@ -59,9 +59,11 @@ if (deletePrereleaseOnly) {
   console.log("🔖  Remove only prerelease");
 }
 
-let deletePattern = process.env.INPUT_DELETE_TAG_PATTERN || "";
-if (deletePattern) {
-  console.log(`releases containing ${deletePattern} will be targeted`);
+let deletePatternStr = process.env.INPUT_DELETE_TAG_PATTERN || "";
+let deletePattern = new RegExp("");
+if (deletePatternStr) {
+  console.log(`releases matching ${deletePatternStr} will be targeted`);
+  deletePattern = new RegExp(deletePatternStr);
 }
 const commonOpts = {
   host: "api.github.com",
@@ -121,9 +123,9 @@ async function deleteOlderReleases(keepLatest, keepMinDownloadCount, deleteExpir
 
     const activeMatchedReleases = data.filter((item) => {
       if (deletePrereleaseOnly) {
-        return !item.draft && item.tag_name.indexOf(deletePattern) !== -1 && item.assets.length > 0 && item.prerelease;
+        return !item.draft && item.tag_name.match(deletePattern) !== -1 && item.assets.length > 0 && item.prerelease;
       } else {
-        return !item.draft && item.tag_name.indexOf(deletePattern) !== -1 && item.assets.length > 0;
+        return !item.draft && item.tag_name.match(deletePattern) !== -1 && item.assets.length > 0;
       }
     })
 

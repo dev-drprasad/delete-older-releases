@@ -5,7 +5,7 @@ This action deletes older releases of given repo
 Add following step to your workflow:
 
 ```yaml
-- uses: dev-drprasad/delete-older-releases@v0.3.0
+- uses: dev-drprasad/delete-older-releases@v0.3.1
   with:
     repo: <owner>/<repoName> # defaults to current repo
     keep_latest: 3
@@ -49,6 +49,14 @@ To delete data that exceeds the specified number of days, please enter the numbe
 | false    | false   |
 
 Specifies whether to delete tags associated to older releases or not. Older tags without any associated releases will not be deleted
+
+#### `delete_prerelease_only`
+
+| required | default |
+| -------- | ------- |
+| false    | false   |
+
+Delete only prerelease
 
 #### `repo`
 

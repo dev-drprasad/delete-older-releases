@@ -53,9 +53,17 @@ if (shouldDeleteTags) {
   console.log("🔖  corresponding tags also will be deleted");
 }
 
-let deletePattern = process.env.INPUT_DELETE_TAG_PATTERN || "";
-if (deletePattern) {
-  console.log(`releases containing ${deletePattern} will be targeted`);
+const deletePrereleaseOnly = process.env.INPUT_DELETE_PRERELEASE_ONLY === "true";
+
+if (deletePrereleaseOnly) {
+  console.log("🔖  Remove only prerelease");
+}
+
+let deletePatternStr = process.env.INPUT_DELETE_TAG_PATTERN || "";
+let deletePattern = new RegExp("");
+if (deletePatternStr) {
+  console.log(`releases matching ${deletePatternStr} will be targeted`);
+  deletePattern = new RegExp(deletePatternStr);
 }
 const commonOpts = {
   host: "api.github.com",
@@ -112,10 +120,14 @@ async function deleteOlderReleases(keepLatest, keepMinDownloadCount, deleteExpir
     }
 
     data = releasesData || [];
-    // filter for delete_pattern
-    const activeMatchedReleases = data.filter(
-      ({ draft, tag_name, assets  }) => !draft && tag_name.indexOf(deletePattern) !== -1 && assets.length > 0
-    );
+
+    const activeMatchedReleases = data.filter((item) => {
+      if (deletePrereleaseOnly) {
+        return !item.draft && item.tag_name.match(deletePattern) !== -1 && item.assets.length > 0 && item.prerelease;
+      } else {
+        return !item.draft && item.tag_name.match(deletePattern) !== -1 && item.assets.length > 0;
+      }
+    })
 
     if (activeMatchedReleases.length === 0) {
       console.log(`😕  no active releases found. exiting...`);
@@ -124,9 +136,16 @@ async function deleteOlderReleases(keepLatest, keepMinDownloadCount, deleteExpir
 
     const matchingLoggingAddition = deletePattern.length > 0 ? " matching" : "";
 
-    console.log(
-      `💬  found total of ${activeMatchedReleases.length}${matchingLoggingAddition} active release(s)`
-    );
+    if (deletePrereleaseOnly) {
+      console.log(
+        `💬  found total of ${activeMatchedReleases.length}${matchingLoggingAddition} active prerelease(s)`
+      );
+    } else {
+      console.log(
+        `💬  found total of ${activeMatchedReleases.length}${matchingLoggingAddition} active release(s)`
+      );
+    }
+    
 
 
     releaseIdsAndTags = activeMatchedReleases

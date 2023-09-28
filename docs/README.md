@@ -56,7 +56,7 @@ Specifies whether to delete tags associated to older releases or not. Older tags
 | -------- | ------- |
 | false    | false   |
 
-Delete only prerelease
+Delete only prereleases
 
 #### `repo`
 

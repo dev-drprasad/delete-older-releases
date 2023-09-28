@@ -75,4 +75,27 @@ Repo name in the format of `<owner>/<repoName>`. Defaults to the repo that execu
 Specifies a release **tag** (not title) Regex string pattern to match. If not specified, then every release will be targeted. If specified, then every release containing the pattern will be targeted. Examples, `beta`, `^v2\..*-beta$`, `v3\.0.*`
 
 ### Flow Chart
-![http-bw](flowChart.svg)
+
+```mermaid
+flowchart TD
+
+    A[Use page parameter to get Github ALL release data from Github API] --> B{Delete pre-release only}
+    
+    B --> |Yes| C[Filter pre-release data]
+    B --> |No| D[Filter delete_pattern]
+    C --> D
+
+    D --> E[Filter assets length > 0]
+
+    E --> F[Sort data by date]
+
+    F --> G[Filter keep latest]
+
+    G -.-> H[Filter keep keepMinDownloadCount]
+
+    G -.-> I[Filter deleteExpiredData]
+    
+    I --> J[Delete old release and tag]
+    
+    H --> J
+```

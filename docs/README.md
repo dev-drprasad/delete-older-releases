@@ -82,8 +82,8 @@ flowchart TD
     A[Use page parameter to get Github ALL release data from Github API] --> B{Delete pre-release only}
     
     B --> |Yes| C[Filter pre-release data]
-    C --> B
     B --> |No| D[Filter delete_pattern]
+    C --> D
 
     D --> E[Filter assets length > 0]
 

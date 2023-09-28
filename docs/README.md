@@ -72,7 +72,7 @@ Repo name in the format of `<owner>/<repoName>`. Defaults to the repo that execu
 | -------- | ------------ |
 | false    | empty string |
 
-Specifies a pattern to match. If not specified then every release will be targeted. If specified then every release containing the pattern will be targeted. Use this option for example to remove old beta releases.
+Specifies a release **tag** (not title) Regex string pattern to match. If not specified, then every release will be targeted. If specified, then every release containing the pattern will be targeted. Examples, `beta`, `^v2\..*-beta$`, `v3\.0.*`
 
 ### Flow Chart
 ![http-bw](flowChart.svg)

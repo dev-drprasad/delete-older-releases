@@ -124,14 +124,30 @@ async function deleteOlderReleases(keepLatest, keepMinDownloadCount, deleteExpir
     data = releasesData || [];
 
     const activeMatchedReleases = data.filter((item) => {
-      const shouldDelete = deletePrereleaseOnly && deletePatternStr;
-      const isDraft = item.draft;
-      const hasAssets = item.assets.length > 0;
-      const isPrerelease = item.prerelease;
-      const isTagMatching = deletePatternStr ? item.tag_name.match(deletePattern) : true;
+      if (deletePrereleaseOnly) {
+        if (deletePatternStr) {
+          return !item.draft && item.assets.length > 0 && item.prerelease && item.tag_name.match(deletePattern);
+        } else {
+          return !item.draft && item.assets.length > 0 && item.prerelease;
+        }
+      } else {
+        if (deletePatternStr) {
+          return !item.draft && item.assets.length > 0 && item.tag_name.match(deletePattern);
+        } else {
+          return !item.draft && item.assets.length > 0;
+        }
+      }
+    })
 
-      return !isDraft && hasAssets && (shouldDelete ? (isTagMatching && isPrerelease) : true);
-    });
+    // const activeMatchedReleases = data.filter((item) => {
+    //   const shouldDelete = deletePrereleaseOnly && deletePatternStr;
+    //   const isDraft = item.draft;
+    //   const hasAssets = item.assets.length > 0;
+    //   const isPrerelease = item.prerelease;
+    //   const isTagMatching = deletePatternStr ? item.tag_name.match(deletePattern) : true;
+    
+    //   return !isDraft && hasAssets && (shouldDelete ? (isTagMatching && isPrerelease) : true);
+    // });
 
     if (activeMatchedReleases.length === 0) {
       console.log(`😕  no active releases found. exiting...`);

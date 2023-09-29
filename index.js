@@ -124,12 +124,14 @@ async function deleteOlderReleases(keepLatest, keepMinDownloadCount, deleteExpir
     data = releasesData || [];
 
     const activeMatchedReleases = data.filter((item) => {
-      if (deletePrereleaseOnly) {
-        return !item.draft && item.tag_name.match(deletePattern) !== -1 && item.assets.length > 0 && item.prerelease;
-      } else {
-        return !item.draft && item.tag_name.match(deletePattern) !== -1 && item.assets.length > 0;
-      }
-    })
+      const shouldDelete = deletePrereleaseOnly && deletePatternStr;
+      const isDraft = item.draft;
+      const hasAssets = item.assets.length > 0;
+      const isPrerelease = item.prerelease;
+      const isTagMatching = deletePatternStr ? item.tag_name.match(deletePattern) : true;
+
+      return !isDraft && hasAssets && (shouldDelete ? (isTagMatching && isPrerelease) : true);
+    });
 
     if (activeMatchedReleases.length === 0) {
       console.log(`😕  no active releases found. exiting...`);

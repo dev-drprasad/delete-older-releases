@@ -74,6 +74,14 @@ Repo name in the format of `<owner>/<repoName>`. Defaults to the repo that execu
 
 Specifies a release **tag** (not title) Regex string pattern to match. If not specified, then every release will be targeted. If specified, then every release containing the pattern will be targeted. Examples, `beta`, `^v2\..*-beta$`, `v3\.0.*`
 
+#### github_rest_api_url
+
+| required | default      |
+| -------- | ------------ |
+| false    |api.github.com|
+
+Github rest api url, the default is "api.github.com". If you are an enterprise user, you can replace it with "{your-github-enterprise-url}/api/v3". Please refer to: https://docs.github.com/en/enterprise-cloud@latest/rest
+
 ### Flow Chart (mermaid format)
 
 ```mermaid

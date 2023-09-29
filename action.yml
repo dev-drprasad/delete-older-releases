@@ -31,6 +31,10 @@ inputs:
   delete_tag_pattern:
     description: part of the tag name. Example, if you want to delete 0.0.1-beta and 0.0.2-beta but not 0.0.1 then set this to just "beta". If not set then it will target all releases.
     required: false
+  github_rest_api_url:
+    description: the URL of the GitHub Rest API to be used.  This might need to be different if you are a GitHub Enterprise user.
+    required: false
+    default: api.github.com
 
 runs:
   using: "node16"

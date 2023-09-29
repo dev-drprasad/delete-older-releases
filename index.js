@@ -65,16 +65,6 @@ if (deletePatternStr) {
   console.log(`releases matching ${deletePatternStr} will be targeted`);
   deletePattern = new RegExp(deletePatternStr);
 }
-const commonOpts = {
-  host: "api.github.com",
-  port: 443,
-  protocol: "https:",
-  auth: `user:${GITHUB_TOKEN}`,
-  headers: {
-    "Content-Type": "application/json",
-    "User-Agent": "node.js",
-  },
-};
 
 let keepMinDownloadCount = Number(process.env.INPUT_KEEP_MIN_DOWNLOAD_COUNTS);
 
@@ -97,6 +87,18 @@ if (Number.isNaN(deleteExpiredData) || deleteExpiredData < 0) {
 
 console.log("🌶  given `delete_expired_data` is ",deleteExpiredData);
 
+let gitHubRestApi = process.env.INPUT_GITHUB_REST_API_URL || "api.github.com";
+
+const commonOpts = {
+  host: gitHubRestApi,
+  port: 443,
+  protocol: "https:",
+  auth: `user:${GITHUB_TOKEN}`,
+  headers: {
+    "Content-Type": "application/json",
+    "User-Agent": "node.js",
+  },
+};
 
 
 async function deleteOlderReleases(keepLatest, keepMinDownloadCount, deleteExpiredData) {
@@ -123,11 +125,29 @@ async function deleteOlderReleases(keepLatest, keepMinDownloadCount, deleteExpir
 
     const activeMatchedReleases = data.filter((item) => {
       if (deletePrereleaseOnly) {
-        return !item.draft && item.tag_name.match(deletePattern) !== -1 && item.assets.length > 0 && item.prerelease;
+        if (deletePatternStr) {
+          return !item.draft && item.assets.length > 0 && item.prerelease && item.tag_name.match(deletePattern);
+        } else {
+          return !item.draft && item.assets.length > 0 && item.prerelease;
+        }
       } else {
-        return !item.draft && item.tag_name.match(deletePattern) !== -1 && item.assets.length > 0;
+        if (deletePatternStr) {
+          return !item.draft && item.assets.length > 0 && item.tag_name.match(deletePattern);
+        } else {
+          return !item.draft && item.assets.length > 0;
+        }
       }
     })
+
+    // const activeMatchedReleases = data.filter((item) => {
+    //   const shouldDelete = deletePrereleaseOnly && deletePatternStr;
+    //   const isDraft = item.draft;
+    //   const hasAssets = item.assets.length > 0;
+    //   const isPrerelease = item.prerelease;
+    //   const isTagMatching = deletePatternStr ? item.tag_name.match(deletePattern) : true;
+    
+    //   return !isDraft && hasAssets && (shouldDelete ? (isTagMatching && isPrerelease) : true);
+    // });
 
     if (activeMatchedReleases.length === 0) {
       console.log(`😕  no active releases found. exiting...`);

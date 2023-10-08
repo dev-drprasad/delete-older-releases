@@ -74,7 +74,7 @@ Repo name in the format of `<owner>/<repoName>`. Defaults to the repo that execu
 
 Specifies a release **tag** (not title) Regex string pattern to match. If not specified, then every release will be targeted. If specified, then every release containing the pattern will be targeted. Examples, `beta`, `^v2\..*-beta$`, `v3\.0.*`
 
-#### github_rest_api_url
+#### `github_rest_api_url`
 
 | required | default      |
 | -------- | ------------ |
@@ -86,24 +86,26 @@ Github rest api url, the default is "api.github.com". If you are an enterprise u
 
 ```mermaid
 flowchart TD 
+01[github rest api url]
+02[Get github all releases]
+03[Filter pre-release data]
+04[Filter delete_tag_pattern]
+05[Filter assets length > 0]
+06[Sort data by date]
+07[Filter keep latest]
+08[Filter keep keepMinDownloadCount]
+09[Filter deleteExpiredData]
+10[Delete old release and tag]
 
-    A[Use page parameter to get Github ALL release data from Github API] --> B{Delete pre-release only}
-    
-    B --> |Yes| C[Filter pre-release data]
-    B --> |No| D[Filter delete_pattern]
-    C --> D
-
-    D --> E[Filter assets length > 0]
-
-    E --> F[Sort data by date]
-
-    F --> G[Filter keep latest]
-
-    G -.-> H[Filter keep keepMinDownloadCount]
-
-    G -.-> I[Filter deleteExpiredData]
-    
-    I --> J[Delete old release and tag]
-    
-    H --> J
+    01 --> 02
+    02 -.-> 03
+    02 -.-> 04
+    03 --> 05
+    04 --> 05
+    05 --> 06
+    06 --> 07
+    07 -.-> 08
+    07 -.-> 09
+    09 --> 10
+    08 --> 10
 ```

@@ -244,7 +244,7 @@ async function deleteOlderReleases(keepLatest, keepMinDownloadCount, deleteExpir
         try {
           const _ = await fetch({
             ...commonOpts,
-            path: `/repos/${owner}/${repo}/git/refs/tags/${tagName}`,
+            path: `/repos/${owner}/${repo}/git/refs/tags/${encodeURI(tagName)}`,
             method: "DELETE",
           });
         } catch (error) {

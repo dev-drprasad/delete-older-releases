@@ -126,15 +126,15 @@ async function deleteOlderReleases(keepLatest, keepMinDownloadCount, deleteExpir
     const activeMatchedReleases = data.filter((item) => {
       if (deletePrereleaseOnly) {
         if (deletePatternStr) {
-          return !item.draft && item.assets.length > 0 && item.prerelease && item.tag_name.match(deletePattern);
+          return !item.draft && item.prerelease && item.tag_name.match(deletePattern);
         } else {
-          return !item.draft && item.assets.length > 0 && item.prerelease;
+          return !item.draft && item.prerelease;
         }
       } else {
         if (deletePatternStr) {
-          return !item.draft && item.assets.length > 0 && item.tag_name.match(deletePattern);
+          return !item.draft && item.tag_name.match(deletePattern);
         } else {
-          return !item.draft && item.assets.length > 0;
+          return !item.draft;
         }
       }
     })

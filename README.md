@@ -90,12 +90,11 @@ flowchart TD
 02[Get github all releases]
 03[Filter pre-release data]
 04[Filter delete_tag_pattern]
-05[Filter assets length > 0]
-06[Sort data by date]
-07[Filter keep latest]
-08[Filter keep keepMinDownloadCount]
-09[Filter deleteExpiredData]
-10[Delete old release and tag]
+05[Sort data by date]
+06[Filter keep latest]
+07[Filter keep keepMinDownloadCount]
+08[Filter deleteExpiredData]
+09[Delete old release and tag]
 
     01 --> 02
     02 -.-> 03
@@ -103,9 +102,8 @@ flowchart TD
     03 --> 05
     04 --> 05
     05 --> 06
-    06 --> 07
-    07 -.-> 08
-    07 -.-> 09
-    09 --> 10
-    08 --> 10
+    06 -.-> 07
+    06 -.-> 08
+    07 --> 09
+    08 --> 09
 ```

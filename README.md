@@ -1,3 +1,10 @@
+# --- WARNING - REPO NO LONGER MAINTAINED ---
+
+This repo will no longer be updated.  The owner (dev-drprasad) is no longer interested, and I (thadguidry) as the only other contributor, have noticed there is no longer a pressing need to maintain it.  This is because there are already much more updated GitHub Actions that have the same features and more.
+
+For new projects, we highly suggest you search for and use any of the other release delete actions available on the [GitHub Actions Marketplace](https://github.com/marketplace/actions).
+For existing projects, we highly suggest you migrate to another GitHub Action to handle deleting releases in your workflows.
+
 # GitHub Action: Delete older releases
 
 This action deletes older releases of given repo
